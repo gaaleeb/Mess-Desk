@@ -1,0 +1,38 @@
+@import url("theme.css");
+
+[hidden] { display: none !important; }
+
+.panel {
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.card {
+  background: var(--card);
+  color: var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+}
+
+.card-title {
+  font-size: 1.05rem;
+  font-weight: bold;
+  margin: 0 0 12px;
+}
+
+.app-title {
+  font-size: clamp(2rem, 9vw, 3.2rem);
+  letter-spacing: 0.08em;
+  font-weight: normal;
+  color: var(--ink);
+  margin: 0;
+}
+
+.muted { color: rgba(20, 20, 20, 0.78); font-style: italic; }
+.cream-muted { color: rgba(242, 239, 228, 0.82); }
+
+.row { display: flex; gap: 16px; align-items: center; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
