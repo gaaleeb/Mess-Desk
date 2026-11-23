@@ -2,9 +2,7 @@
 
 A local-first web app for a shared flat: fixed bills, bazar spending and daily meals in one place, with every money entry approved by a manager. Built from the "Mess Management App Plan" spec (spec sections 11–15 govern).
 
-## Status: Phases 1–7 (full local version) built
-
-Works today:
+## Status
 
 - **Landing page** (`index.html`): exactly three buttons — join, create, login. Forms live on `join.html`, `create.html` and `login.html`. Create shows a generated `MESS-XXXXXX` ID with copy button and a "Join as a member" checkbox, seeds the standard bill template; join waits for manager acceptance; login has a 5-attempt / 60 s lockout. The `login.html` footer carries the small "Load demo data" and "Admin" links
 - **Member dashboard** (`member.html`): bills + meal status circles with word and amount, orange pending badge, pending strip, current-month meal table with 0.5-step counters (instant save, audit log), copy-yesterday and set-remaining-days, "Pay bills", "Add bazar cost" (multi-line, categories), "Settle meal balance" (capped at your meal debt), provisional meal rate label, opening balance carry-forward lines
@@ -18,8 +16,6 @@ Works today:
 
 Not built (by design): a real server / database / multi-device sync (phase 8, separate brief), weighted meal types, receipt photos, notifications, notice board, Bangla, PWA install (all out of scope for v1 — see spec section 15).
 
-Study notes for the project defense (comprehension, not cosmetics): see `docs/` — architecture map, key code blocks, patterns, Q&A prep.
-
 ## How to run
 
 ES modules need HTTP, not `file://`:
@@ -29,18 +25,6 @@ python -m http.server 8000
 ```
 
 then open `http://localhost:8000`.
-
-## Tests
-
-```sh
-node tests/calc.test.js    # 25 spec section-14 cases (money formulas)
-node tests/flows.test.mjs  # end-to-end service flow: create, submit, approve, reject,
-                           # withdraw, close, reopen, self-approve, permissions
-node tests/smoke.test.mjs  # seeds the demo mess, opens every page module, checks the
-                           # worked example end to end
-```
-
-Or open `http://localhost:8000/tests/index.html` for the browser runner. All 25 spec cases must pass before a change is called done.
 
 ## Rules enforced in code
 
