@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESS DESK — Manager</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+</head>
+<body>
+  <header id="appnav"></header>
+  <main class="page">
+    <div class="tabs no-print" id="manager-tabs">
+      <button class="tab is-active" data-tab="dashboard" type="button">Dashboard</button>
+      <button class="tab" data-tab="bills" type="button">Bills</button>
+      <button class="tab" data-tab="members" type="button">Members</button>
+      <button class="tab" data-tab="member-detail" type="button" id="tab-member-detail" hidden>Member detail</button>
+      <button class="tab" data-tab="report" type="button">Report &amp; close</button>
+      <button class="tab" data-tab="settings" type="button">Settings</button>
+      <div class="month-nav" style="margin-left: auto">
+        <button class="btn btn--ghost btn--small" id="prev-month" type="button" aria-label="Previous month">‹</button>
+        <span id="month-label" class="month-label"></span>
+        <button class="btn btn--ghost btn--small" id="next-month" type="button" aria-label="Next month">›</button>
+      </div>
+    </div>
+
+    <section data-view="dashboard" class="stack">
+      <div class="page-head">
+        <h1 id="mess-title">Mess</h1>
+        <button class="btn btn--ghost btn--small" id="copy-mess-id" type="button">Copy mess ID</button>
+      </div>
+      <div class="grid-tiles" id="summary-tiles"></div>
+      <p id="numbers-check" class="ok-strip"></p>
+
+      <div class="join-requests card" id="join-requests" hidden>
+        <h2 class="card-title">Join requests</h2>
+        <div id="join-requests-list"></div>
+      </div>
+
+      <section class="card no-print">
+        <div class="approvals-head">
+          <h2 class="card-title" style="margin: 0">Approvals <span id="approvals-count" class="tag">0</span></h2>
+          <div class="row wrap">
+            <select id="filter-type" class="field select" aria-label="Filter by type">
+              <option value="all">All types</option>
+              <option value="payment">Bill payments</option>
+              <option value="settlement">Settlements</option>
+              <option value="bazar">Bazar</option>
+            </select>
+            <select id="filter-member" class="field select" aria-label="Filter by member"></select>
+            <input type="date" id="filter-date" class="field" aria-label="Filter by date" />
+            <button class="btn btn--ghost btn--small" id="clear-filters" type="button">Clear</button>
+            <button class="btn btn--ghost btn--small" id="approve-all-shown" type="button">Approve all shown</button>
+          </div>
+        </div>
+        <div id="approvals-list" class="stack"></div>
+        <p class="muted" id="approvals-empty" hidden>Nothing waiting for approval.</p>
+      </section>
+
+      <section class="card">
+        <div class="approvals-head">
+          <h2 class="card-title" style="margin: 0">Member grid</h2>
+          <label class="check"><input type="checkbox" id="behind-only" /> Who is behind</label>
+        </div>
+        <div class="table-wrap">
+          <table class="table" id="member-grid">
+            <thead><tr>
+              <th><button class="th-sort" data-sort="name" type="button">Name</button></th>
+              <th class="num"><button class="th-sort" data-sort="sharesOwed" type="button">Owed</button></th>
+              <th class="num"><button class="th-sort" data-sort="billsPaid" type="button">Paid</button></th>
+              <th>Bills</th>
+              <th class="num"><button class="th-sort" data-sort="meals" type="button">Meals</button></th>
+              <th class="num"><button class="th-sort" data-sort="mealCost" type="button">Meal cost</button></th>
+              <th>Meals status</th>
+              <th></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section data-view="bills" class="stack" hidden>
+      <section class="card">
+        <h2 class="card-title">Bill template</h2>
+        <div class="table-wrap">
+          <table class="table" id="template-table">
+            <thead><tr><th>Item</th><th class="num">Default amount</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <form id="add-item-form" class="row wrap" style="margin-top: 10px">
+          <input type="text" id="new-item-name" class="field" placeholder="Item name" maxlength="40" required aria-label="Item name" />
+          <input type="number" id="new-item-amount" class="field" min="0" step="1" inputmode="numeric" placeholder="Default amount" aria-label="Default amount" />
+          <button type="submit" class="btn btn--ghost">Add item</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="approvals-head">
+          <h2 class="card-title" style="margin: 0">This month's bills</h2>
+          <div class="row wrap">
+            <button class="btn btn--ghost btn--small" id="generate-bills" type="button">Generate this month's bills</button>
+            <button class="btn" id="publish-bills" type="button" hidden>Publish</button>
+          </div>
+        </div>
+        <p class="muted" id="bills-month-note"></p>
+        <div class="table-wrap">
+          <table class="table" id="monthly-bills-table">
+            <thead><tr><th>Item</th><th class="num">Amount</th><th>Split</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="muted" id="bills-month-empty" hidden>No bills generated yet. Items copy their default amounts; edit any row below before publishing.</p>
+
+        <form id="special-bill-form" class="row wrap" style="margin-top: 10px">
+          <input type="text" id="special-bill-name" class="field" placeholder="Special bill name" maxlength="40" aria-label="Special bill name" />
+          <input type="number" id="special-bill-amount" class="field" min="1" step="1" placeholder="Amount" aria-label="Amount" />
+          <button type="submit" class="btn btn--ghost">Add special bill</button>
+        </form>
+
+        <div class="split-panel card" id="split-panel" hidden style="margin-top: 14px">
+          <h3 class="section-title" style="margin-top: 0">Edit split — <span id="split-bill-name"></span></h3>
+          <div class="row wrap" id="split-mode-row">
+            <label class="check"><input type="radio" name="split-mode" value="equal" /> Equal (prorated by days present)</label>
+            <label class="check"><input type="radio" name="split-mode" value="percent" /> Percentage</label>
+            <label class="check"><input type="radio" name="split-mode" value="amount" /> Fixed amounts</label>
+          </div>
+          <div id="split-inputs" class="stack" style="margin-top: 10px"></div>
+          <p class="error-text" id="split-error" hidden></p>
+          <div class="row wrap" style="margin-top: 10px">
+            <button class="btn" id="save-split" type="button">Save split</button>
+            <button class="btn btn--ghost" id="copy-split-all" type="button">Copy this split to all bills</button>
+            <button class="btn btn--ghost" id="close-split" type="button">Close</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section data-view="members" class="stack" hidden>
+      <section class="card">
+        <h2 class="card-title">Add member</h2>
+        <form id="add-member-form" class="row wrap">
+          <input type="text" id="new-member-name" class="field" placeholder="Name" maxlength="30" required aria-label="Name" />
+          <input type="password" id="new-member-password" class="field" placeholder="Password" minlength="6" required aria-label="Password" />
+          <button type="submit" class="btn btn--ghost">Add member</button>
+        </form>
+      </section>
+      <section class="card">
+        <h2 class="card-title">Members</h2>
+        <div class="table-wrap">
+          <table class="table" id="members-table">
+            <thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Joined</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section data-view="member-detail" class="stack" hidden>
+      <div class="view-head no-print"><button class="icon-back" id="back-to-members" type="button" aria-label="Back to members"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2 class="card-title" style="margin: 0" id="member-detail-name">Member</h2></div>
+      <section class="card">
+        <div class="status-line" id="member-detail-ledgers"></div>
+        <p class="muted" id="member-detail-meta"></p>
+        <div class="row wrap no-print" style="margin-top: 8px">
+          <button class="btn btn--ghost btn--small" id="detail-reset-password" type="button">Reset password</button>
+          <button class="btn btn--ghost btn--small" id="detail-make-manager" type="button">Make manager</button>
+        </div>
+      </section>
+      <section class="card">
+        <h3 class="section-title">Payments</h3>
+        <div class="table-wrap"><table class="table" id="detail-payments"><thead><tr><th>Date</th><th>Type</th><th class="num">Amount</th><th>State</th><th class="no-print"></th></tr></thead><tbody></tbody></table></div>
+        <p class="muted empty-note" id="detail-payments-empty" hidden>No entries.</p>
+      </section>
+      <section class="card">
+        <h3 class="section-title">Bazar</h3>
+        <div class="table-wrap"><table class="table" id="detail-bazar"><thead><tr><th>Date</th><th>Categories</th><th class="num">Amount</th><th>State</th><th class="no-print"></th></tr></thead><tbody></tbody></table></div>
+        <p class="muted empty-note" id="detail-bazar-empty" hidden>No entries.</p>
+      </section>
+      <section class="card">
+        <h3 class="section-title">Meals</h3>
+        <div class="table-wrap"><table class="table" id="detail-meals"><thead><tr><th>Date</th><th class="num">Meals</th><th class="no-print">Set</th></tr></thead><tbody></tbody></table></div>
+        <p class="muted empty-note" id="detail-meals-empty" hidden>No meals this month.</p>
+      </section>
+      <section class="card">
+        <h3 class="section-title">Audit log</h3>
+        <div class="table-wrap"><table class="table" id="detail-audit"><thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Detail</th></tr></thead><tbody></tbody></table></div>
+        <p class="muted empty-note" id="detail-audit-empty" hidden>No log entries yet.</p>
+      </section>
+    </section>
+
+    <section data-view="report" class="stack" hidden>
+      <section class="card">
+        <div class="approvals-head">
+          <h2 class="card-title" style="margin: 0">Month report — <span id="report-month-label"></span></h2>
+          <div class="row wrap no-print">
+            <button class="btn btn--ghost btn--small" id="export-csv" type="button">Export CSV</button>
+            <button class="btn btn--ghost btn--small" id="print-report" type="button">Print report</button>
+            <button class="btn" id="close-month-btn" type="button">Close month</button>
+            <button class="btn btn--ghost" id="reopen-month-btn" type="button" hidden>Reopen month</button>
+          </div>
+        </div>
+        <div class="notice" id="close-pending-warning" hidden></div>
+        <p id="report-numbers-check" class="ok-strip"></p>
+        <p class="muted" id="closed-banner" hidden></p>
+        <div class="table-wrap">
+          <table class="table" id="report-table">
+            <thead><tr><th>Member</th><th class="num">Bills owed</th><th class="num">Paid</th><th class="num">Bill balance</th><th class="num">Meals</th><th class="num">Bazar</th><th class="num">Meal balance</th><th class="num">Net</th></tr></thead>
+            <tbody></tbody>
+            <tfoot><tr id="report-foot"></tr></tfoot>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section data-view="settings" class="card" hidden>
+      <h2 class="card-title">Settings</h2>
+      <label class="check"><input type="checkbox" id="settings-takes-part" /> I am also a member (pay, eat, balances)</label>
+      <p class="error-text" id="settings-error" hidden></p>
+      <p class="muted">Switching this changes future months only. It is blocked while your balance is not zero.</p>
+      <p class="muted">Mess ID: <strong id="settings-mess-id"></strong></p>
+    </section>
+
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/ui/manager.js"></script>
+</body>
+</html>
