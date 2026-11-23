@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESS DESK — Join a mess</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+  <style>
+    main { min-height: 100vh; display: grid; place-items: center; padding: 20px 14px; }
+    .auth-card { width: min(440px, 100%); }
+    .back { margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card auth-card" aria-labelledby="join-title">
+      <a class="icon-back back" href="index.html" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <h1 class="card-title" id="join-title">Join a mess</h1>
+      <form id="join-form" class="stack" novalidate>
+        <div class="field"><label for="join-mess-id">Mess ID</label><input type="text" id="join-mess-id" placeholder="MESS-XXXXXX" required autocomplete="off" /></div>
+        <div class="field"><label for="join-name">Your name</label><input type="text" id="join-name" maxlength="30" required autocomplete="off" /></div>
+        <div class="field"><label for="join-password">Password</label><input type="password" id="join-password" minlength="6" required /></div>
+        <p class="muted" style="font-style: italic">Your request goes to the manager for approval.</p>
+        <p class="error-text" id="join-error" hidden></p>
+        <p class="ok-text" id="join-ok" hidden></p>
+        <button type="submit" class="btn">Request to join</button>
+      </form>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/ui/join.js"></script>
+</body>
+</html>

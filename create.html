@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MESS DESK — Create a mess</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+  <style>
+    main { min-height: 100vh; display: grid; place-items: center; padding: 20px 14px; }
+    .auth-card { width: min(440px, 100%); }
+    .back { margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card auth-card" aria-labelledby="create-title">
+      <a class="icon-back back" href="index.html" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <h1 class="card-title" id="create-title">Create a mess</h1>
+      <form id="create-form" class="stack" novalidate>
+        <div class="field"><label>Mess ID</label><input type="text" id="create-public-id" readonly aria-readonly="true" /></div>
+        <button type="button" class="btn btn--ghost" id="copy-id-btn">Copy mess ID</button>
+        <div class="field"><label for="create-mess-name">Mess name</label><input type="text" id="create-mess-name" maxlength="30" required autocomplete="off" /></div>
+        <div class="field"><label for="create-manager-name">Your name</label><input type="text" id="create-manager-name" maxlength="30" required autocomplete="off" /></div>
+        <div class="field"><label for="create-password">Password</label><input type="password" id="create-password" minlength="6" required /></div>
+        <label class="check"><input type="checkbox" id="create-join-member" checked /> Join as a member</label>
+        <p class="error-text" id="create-error" hidden></p>
+        <button type="submit" class="btn">Create mess</button>
+      </form>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/ui/create.js"></script>
+</body>
+</html>
